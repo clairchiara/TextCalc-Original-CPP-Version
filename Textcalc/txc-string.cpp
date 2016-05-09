@@ -11,37 +11,27 @@
 #include "txc-string.h"
 #include "txc-vector.h"
 
-txc::string::string() {
-	exp = std::string();
-}
+txc::string::string() {}
 
-txc::string::~string() {
-}
+txc::string::string(const std::string& s) : std::string(s) {}
 
-std::string txc::string::getExp() {
-	return exp;
-}
+txc::string::string(const char* c) : std::string(c) {}
 
-void txc::string::setExp(std::string string) {
-	exp = string;
-}
-
-void txc::string::setFromInput() {
-	
+txc::string txc::string::newFromInput() {
 	char *input = new char;
-	
 	scanf("%[^\n]%*c", input);
-	setExp(std::string(input));
+	txc::string s(input);
 	delete input;
+	return s;
 }
 
-void txc::string::checkBrackets() {
+void txc::string::checkBrackets() const {
 	
 	long j = 0;
 	
-	for (long i = 0; i < exp.length(); i++) {
-		if (exp[i] == '(') j++;
-		else if (exp[i] == ')') j--;
+	for (long i = 0; i < length(); i++) {
+		if (at(i) == '(') j++;
+		else if (at(i) == ')') j--;
 		if (j < 0) {
 			std::cout << "Bad brackets!" << "\n";
 			exit(1);
@@ -53,9 +43,9 @@ void txc::string::checkBrackets() {
 	}
 }
 
-void txc::string::checkSpaces() {
-	for (long i = 0; i < exp.length(); i++) {
-		if (exp[i] == ' ') {
+void txc::string::checkSpaces() const {
+	for (long i = 0; i < length(); i++) {
+		if (at(i) == ' ') {
 			std::cout << "Spaces aren't allowed!" << "\n";
 			exit(1);
 		}
@@ -67,74 +57,75 @@ auto malformed = [] (long place) {
 	exit(1);
 };
 
-void txc::string::checkForm() {
-	for (long i = 0; i < exp.length()-1; i++) {
-		if (strchr(MSOPERATORS, exp[i]) != 0) {
-			if (strchr(AFTSOPS, exp[i+1]) != 0) continue;
+void txc::string::checkForm() const {
+	for (long i = 0; i < length()-1; i++) {
+		if (strchr(MSOPERATORS, at(i)) != 0) {
+			if (strchr(AFTSOPS, at(i+1)) != 0) continue;
 			else malformed(i + 1);
-		} else if (exp[i] == '!') {
-			if (strchr(AFTFACT, exp[i+1]) != 0 || exp[i+1] == '\0') continue;
+		} else if (at(i) == '!') {
+			if (strchr(AFTFACT, at(i+1)) != 0 || at(i+1) == '\0') continue;
 			else malformed(i + 1);
-		} else if (exp[i] == '(') {
-			if (strchr(CNUMBERS, exp[i+1]) != 0 || exp[i+1] == '(' || exp[i+1] == '-' || strchr(TRIG, exp[i+1]) != 0) continue;
+		} else if (at(i) == '(') {
+			if (strchr(CNUMBERS, at(i+1)) != 0 || at(i+1) == '(' || at(i+1) == '-' || strchr(TRIG, at(i+1)) != 0) continue;
 			else malformed(i + 1);
-		} else if (exp[i] == ')') {
-			if (strchr(OPERATORS, exp[i+1]) != 0 || exp[i+1] == '\0' || exp[i+1] == ')') continue;
+		} else if (at(i) == ')') {
+			if (strchr(OPERATORS, at(i+1)) != 0 || at(i+1) == '\0' || at(i+1) == ')') continue;
 			else malformed(i + 1);
-		} else if (strchr(CNUMBERS, exp[i]) != 0) {
-			if (strchr(AFTERNUM, exp[i+1]) != 0) continue;
+		} else if (strchr(CNUMBERS, at(i)) != 0) {
+			if (strchr(AFTERNUM, at(i+1)) != 0) continue;
 			else malformed(i + 1);
-		} else if (exp[i] == '-') {
-			if (strchr(AFTMINUS, exp[i+1]) != 0) {
-				if (exp[i+1] == '-' && exp[i+2] == '-') malformed(i + 1);
+		} else if (at(i) == '-') {
+			if (strchr(AFTMINUS, at(i+1)) != 0) {
+				if (at(i+1) == '-' && at(i+2) == '-') malformed(i + 1);
 				else continue;
 			} else malformed(i + 1);
-		} else if (strchr(TRIG, exp[i]) != 0) {
-			if (strchr(AFTTRIG, exp[i+1]) != 0) continue;
+		} else if (strchr(TRIG, at(i)) != 0) {
+			if (strchr(AFTTRIG, at(i+1)) != 0) continue;
 			else malformed(i + 1);
 		}
-		if (strchr(ACCEPTED, exp[i]) == 0) malformed(i + 1);
+		if (strchr(ACCEPTED, at(i)) == 0) malformed(i + 1);
 	}
-	if (exp.at(exp.length()-1) != ')' && strchr(CNUMBERS, exp.at(exp.length()-1)) == 0 && exp.at(exp.length()-1) != '!') malformed(exp.length());
+	if (at(length()-1) != ')' && strchr(CNUMBERS, at(length()-1)) == 0 && at(length()-1) != '!') malformed(length());
 }
 
-void txc::string::xCheckForm() {
-	for (long i = 0; i < exp.length()-1; i++) {
-		if (strchr(MSOPERATORS, exp[i]) != 0) {
-			if (strchr(XAFTSOPS, exp[i+1]) != 0) continue;
+void txc::string::xCheckForm() const {
+	for (long i = 0; i < length()-1; i++) {
+		if (strchr(MSOPERATORS, at(i)) != 0) {
+			if (strchr(XAFTSOPS, at(i+1)) != 0) continue;
 			else malformed(i + 1);
-		} else if (exp[i] == '!') {
-			if (strchr(AFTFACT, exp[i+1]) != 0 || exp[i+1] == '\0') continue;
+		} else if (at(i) == '!') {
+			if (strchr(AFTFACT, at(i+1)) != 0 || at(i+1) == '\0') continue;
 			else malformed(i + 1);
-		} else if (exp[i] == '(') {
-			if (strchr(XCNUMBERS, exp[i+1]) != 0 || exp[i+1] == '(' || exp[i+1] == '-' || strchr(TRIG, exp[i+1]) != 0) continue;
+		} else if (at(i) == '(') {
+			if (strchr(XCNUMBERS, at(i+1)) != 0 || at(i+1) == '(' || at(i+1) == '-' || strchr(TRIG, at(i+1)) != 0) continue;
 			else malformed(i + 1);
-		} else if (exp[i] == ')') {
-			if (strchr(OPERATORS, exp[i+1]) != 0 || exp[i+1] == '\0' || exp[i+1] == ')') continue;
+		} else if (at(i) == ')') {
+			if (strchr(OPERATORS, at(i+1)) != 0 || at(i+1) == '\0' || at(i+1) == ')') continue;
 			else malformed(i + 1);
-		} else if (strchr(CNUMBERS, exp[i]) != 0) {
-			if (strchr(AFTERNUM, exp[i+1]) != 0) continue;
+		} else if (strchr(CNUMBERS, at(i)) != 0) {
+			if (strchr(AFTERNUM, at(i+1)) != 0) continue;
 			else malformed(i + 1);
-		} else if (exp[i] == '-') {
-			if (strchr(XAFTMINUS, exp[i+1]) != 0) {
-				if (exp[i+1] == '-' && exp[i+2] == '-') malformed(i + 1);
+		} else if (at(i) == '-') {
+			if (strchr(XAFTMINUS, at(i+1)) != 0) {
+				if (at(i+1) == '-' && at(i+2) == '-') malformed(i + 1);
 				else continue;
 			} else malformed(i + 1);
-		} else if (exp[i] == 'x') {
-			if (strchr(AFTX, exp[i+1]) != 0) continue;
+		} else if (at(i) == 'x') {
+			if (strchr(AFTX, at(i+1)) != 0) continue;
 			else malformed(i + 1);
-		} else if (strchr(TRIG, exp[i]) != 0) {
-			if(strchr(XAFTTRIG, exp[i+1]) != 0) continue;
+		} else if (strchr(TRIG, at(i)) != 0) {
+			if(strchr(XAFTTRIG, at(i+1)) != 0) continue;
 			else malformed(i + 1);
 		}
-		if (strchr(XACCEPTED, exp[i]) ==0) malformed(i + 1);
+		if (strchr(XACCEPTED, at(i)) ==0) malformed(i + 1);
 	}
-	if (exp.at(exp.length()-1) != ')' && strchr(XCNUMBERS, exp.at(exp.length()-1)) == 0 && exp.at(exp.length()-1) != '!') malformed(exp.length());
+	if (at(length()-1) != ')' && strchr(XCNUMBERS, at(length()-1)) == 0 && at(length()-1) != '!') malformed(length());
 }
 
-void txc::string::solveEquation(double one, double two, const long passages) {
+void txc::string::solveEquation(double one, double two, const long& passages) {
 	
 	txc::string equation;
+	txc::string exp;
 	txc::vector e_vector;
 	double solutionOne;
 	double solutionTwo;
@@ -145,11 +136,11 @@ void txc::string::solveEquation(double one, double two, const long passages) {
 
 	std::cout << "Equations are solved with the bisection method" << "\n";
 	std::cout << "Please type in your equation, without spaces" << "\n";
-	equation.setFromInput();
+	equation = txc::string::newFromInput();
 	equation.checkSpaces();
 	equation.checkBrackets();
 	equation.xCheckForm();
-	setExp(equation.getExp());
+	exp = equation;
 	e_vector.populate(equation);
 	e_vector.replaceX(one);
 	solutionOne = e_vector.solveAll();
@@ -157,7 +148,7 @@ void txc::string::solveEquation(double one, double two, const long passages) {
 		std::cout << "The approximate solution is x=" << one << "\n";
 		exit(0);
 	}
-	newEquation.setExp(std::string(exp));
+	newEquation = exp;
 	e_vector.populate(newEquation);
 	e_vector.replaceX(two);
 	solutionTwo = e_vector.solveAll();
@@ -170,7 +161,7 @@ void txc::string::solveEquation(double one, double two, const long passages) {
 		int i =1;
 
 		while (txc::samesign(solutionOne, solutionTwo)) {
-			newEquation.setExp(std::string(exp));
+			newEquation = exp;
 			e_vector.populate(newEquation);
 			one = txc::random(i);
 			e_vector.replaceX(one);
@@ -179,7 +170,7 @@ void txc::string::solveEquation(double one, double two, const long passages) {
 				std::cout << "\r" << "The approximate solution is x=" << one << "\n";
 				exit(0);
 			}
-			newEquation.setExp(std::string(exp));
+			newEquation = exp;
 			e_vector.populate(newEquation);
 			two = txc::random(i);
 			e_vector.replaceX(two);
@@ -197,7 +188,7 @@ void txc::string::solveEquation(double one, double two, const long passages) {
 		}
 	}
 	three = (one + two) / 2;
-	newEquation.setExp(std::string(exp));
+	newEquation = exp;
 	e_vector.populate(newEquation);
 	e_vector.replaceX(three);
 	solutionThree = e_vector.solveAll();
@@ -207,7 +198,7 @@ void txc::string::solveEquation(double one, double two, const long passages) {
 	}
 	for (int i = 0; i < passages; i++) {
 		three = (one + two) / 2;
-		newEquation.setExp(std::string(exp));
+		newEquation = exp;
 		e_vector.populate(newEquation);
 		e_vector.replaceX(three);
 		solutionThree = e_vector.solveAll();

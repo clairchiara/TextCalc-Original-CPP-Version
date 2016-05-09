@@ -9,24 +9,22 @@
 #define __Textcalc__txc_string__
 
 #include <iostream>
+#include <string>
 #include "functions.h"
 
 namespace txc {
 	
-	class string {
-	private:
-		std::string exp;
+	class string : public std::string {
 	public:
 		string();
-		~string();
-		std::string getExp();
-		void setExp(std::string);
-		void setFromInput();												// Sets from the console input
-		void checkBrackets();												// Checks for bracket errors
-		void checkSpaces();													// Checks that there are no spaces
-		void checkForm();													// Checks other well-formedness conditions
-		void xCheckForm();													// Checks well-formedness conditions
-		void solveEquation(double, double, const long);	// Solves the equation with starting values and number of passages from the input
+		string(const std::string&);
+		string(const char*);
+		static txc::string newFromInput();					// Creates a new string from console input
+		void checkBrackets() const;							// Checks for bracket errors
+		void checkSpaces() const;							// Checks that there are no spaces
+		void checkForm() const;								// Checks other well-formedness conditions
+		void xCheckForm() const;							// Checks well-formedness conditions
+		void solveEquation(double, double, const long&);	// Solves the equation with starting values and number of passages from the input
 	};
 	
 }

@@ -47,10 +47,9 @@ int main(int argc, const char * argv[]) {
 		else if (strcmp(argv[1], "-e") == 0) { // Expression solving mode
 			std::cout << "Please type in your expression, without spaces\n";
 			
-			txc::string expression;
+			txc::string expression = txc::string::newFromInput();
 			txc::vector eqVector;
 			
-			expression.setFromInput();
 			expression.checkBrackets();
 			expression.checkSpaces();
 			expression.checkForm();

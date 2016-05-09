@@ -13,42 +13,33 @@
 
 namespace txc {
 	
-	class vector;														// Forward declaration for friendship with txc::element
-	
-	class element {
-		friend class txc::vector;
-	private:
-		double val;													// Contains numbers
-		char notval;													// Contains operators
+	struct element {
+		double val;											// Contains numbers
+		char notval;										// Contains operators
 	public:
 		element();
-		element(double, char);
-		~element();
-		double getVal();
-		char getNotVal();
-		void setVal(double);
-		void setNotVal(char);
+		element(const double&, const char&);
+		double getVal() const;
+		char getNotVal() const;
+		void setVal(const double&);
+		void setNotVal(const char&);
 	};
 	
-	class vector {
-	private:
-		std::vector<txc::element> exp;
+	class vector : public std::vector<txc::element> {
 	public:
 		vector();
-		~vector();
-		std::vector<txc::element> getExp();
-		void setExp(std::vector<txc::element>);
+		vector(const std::vector<txc::element>&);
 		void populate(txc::string);							// Populates the vector from a string
-		void negatives();											// Turns "(char) -, (double) #" into "(double) -#"
-		void replaceX(double);								// Replaces X with the value from input
-		void replaceConst();										// Replaces constants (π and e)
-		int countParentheses();								// Returns the number of parentheses
-		void singleArgOp(long, double);					// Calculates operations with single arguments
-		void doubleArgOp(long, double);				// Calculates operations with two arguments
-		void trig(long, double);								// Calculate trigonometric functions
-		void solveBrackets();									// Solves the last set of brackets
+		void negatives();									// Turns "(char) -, (double) #" into "(double) -#"
+		void replaceX(const double&);						// Replaces X with the value from input
+		void replaceConst();								// Replaces constants (π and e)
+		int countParentheses() const;						// Returns the number of parentheses
+		void singleArgOp(const long&, const double&);		// Calculates operations with single arguments
+		void doubleArgOp(const long&, const double&);		// Calculates operations with two arguments
+		void trig(const long&, const double&);				// Calculate trigonometric functions
+		void solveBrackets();								// Solves the last set of brackets
 		double solveExpression();							// Solves a bracketless expression
-		double solveAll();											// Solves an expression containing brackets
+		double solveAll();									// Solves an expression containing brackets
 	};
 	
 }

@@ -14,98 +14,81 @@ txc::element::element() {
 	notval = '\0';
 }
 
-txc::element::element(double a, char b) {
-	val = a;
-	notval = b;
-}
+txc::element::element(const double& a, const char& b) : val(a), notval(b) {}
 
-txc::element::~element() {
-}
-
-double txc::element::getVal() {
+double txc::element::getVal() const {
 	return val;
 }
 
-char txc::element::getNotVal() {
+char txc::element::getNotVal() const {
 	return notval;
 }
 
-void txc::element::setVal(double number) {
+void txc::element::setVal(const double& number) {
 	val = number;
 }
 
-void txc::element::setNotVal(char oper) {
+void txc::element::setNotVal(const char& oper) {
 	notval = oper;
 }
 
-txc::vector::vector() {
-	exp = std::vector<txc::element>();
-}
+txc::vector::vector() {}
 
-txc::vector::~vector() {
-}
-
-std::vector<txc::element>txc::vector::getExp() {
-	return exp;
-}
-
-void txc::vector::setExp(std::vector<txc::element> input) {
-	exp = input;
-}
+txc::vector::vector(const std::vector<txc::element>& v) : std::vector<txc::element>(v) {}
 
 void txc::vector::populate(txc::string expression) {
 	
 	txc::element number;
 	txc::element character;
-	int remainingLength = (int)expression.getExp().length();
+	int remainingLength = (int)expression.length();
 	
-	exp.clear();
+	clear();
 	while (remainingLength != 0) {
-		if (strchr(NUMBERSWITHPOINT, expression.getExp()[0]) != 0) {
-			number.val = atof(expression.getExp().c_str());
-			long cut = expression.getExp().find_first_not_of(NUMBERSWITHPOINT);
-			expression.setExp(expression.getExp().erase(0, cut));
-			exp.push_back(number);
-			remainingLength = (int)expression.getExp().length();
+		if (strchr(NUMBERSWITHPOINT, expression[0]) != 0) {
+			number.val = atof(expression.c_str());
+			long cut = expression.find_first_not_of(NUMBERSWITHPOINT);
+			expression.erase(0, cut);
+			push_back(number);
+			remainingLength = (int)expression.length();
 		} else {
-			character.notval = expression.getExp()[0];
-			exp.push_back(character);
-			expression.setExp(expression.getExp().erase(0, 1));
+			character.notval = expression[0];
+			push_back(character);
+			expression.erase(0, 1);
 			remainingLength--;
 		}
 	}
 }
 
 void txc::vector::negatives() {
-	for (int i = 0; i <= exp.size()-1; i++) {
-		if (exp[i].notval == '-') {
+	for (int i = 0; i <= size()-1; i++) {
+		if (at(i).notval == '-') {
 			if (i == 0) {
 				
-				txc::element n = {0 - exp[i+1].val, '\0'};
+				txc::element n = {0 - at(i+1).val, '\0'};
 				
-				exp.erase(exp.begin()+i+1);
-				exp.insert(exp.begin()+i+1, n);
-				exp.erase(exp.begin()+i);
-			} else if (exp[i-1].notval != ')' && exp[i-1].notval != '!' && exp[i-1].notval != '\0') {
+				erase(begin()+i+1);
+				insert(begin()+i+1, n);
+				erase(begin()+i);
+			} else if (at(i-1).notval != ')' && at(i-1).notval != '!' && at(i-1).notval != '\0') {
 				
-				txc::element n = {0 - exp[i+1].val, '\0'};
+				txc::element n = {0 - at(i+1).val, '\0'};
 				
-				exp.erase(exp.begin()+i+1);
-				exp.insert(exp.begin()+i+1, n);
-				exp.erase(exp.begin()+i);
+				erase(begin()+i+1);
+				insert(begin()+i+1, n);
+				erase(begin()+i);
 			}
 		}
 	}
 }
 
-void txc::vector::replaceX(double value) {
+void txc::vector::replaceX(const double& value) {
 	
 	txc::element evalue = {value, '\0'};
 	
-	for (int i = 0; i <= exp.size()-1; i++) {
-		if (exp[i].notval == 'x') {
-			exp.erase(exp.begin()+i);
-			exp.insert(exp.begin()+i, evalue);
+	for (int i = 0; i <= size()-1; i++) {
+		if (at(i).notval == 'x') {
+			erase(begin()+i);
+			insert(begin()+i, evalue);
 		}
 	}
 }
@@ -115,156 +98,156 @@ void txc::vector::replaceConst() {
 	txc::element pi = {M_PI, '\0'};
 	txc::element e = {M_E, '\0'};
 	
-	for (int i = 0; i <= exp.size()-1; i++) {
-		if (exp[i].notval == 'p') {
-			exp.erase(exp.begin()+i);
-			exp.insert(exp.begin()+i, pi);
-		} else if (exp[i].notval == 'e') {
-			exp.erase(exp.begin()+i);
-			exp.insert(exp.begin()+i, e);
+	for (int i = 0; i <= size()-1; i++) {
+		if (at(i).notval == 'p') {
+			erase(begin()+i);
+			insert(begin()+i, pi);
+		} else if (at(i).notval == 'e') {
+			erase(begin()+i);
+			insert(begin()+i, e);
 		}
 	}
 }
 
-int txc::vector::countParentheses() {
+int txc::vector::countParentheses() const {
 	
 	int parentheses = 0;
 	
-	for (long i = 0; i < exp.size(); i++) if (exp[i].notval == '(' || exp[i].notval == ')') parentheses++;
+	for (long i = 0; i < size(); i++) if (at(i).notval == '(' || at(i).notval == ')') parentheses++;
 	return parentheses;
 }
 
-void txc::vector::singleArgOp(long i, double result) {
+void txc::vector::singleArgOp(const long& i, const double& result) {
 	
 	txc::element eresult = {result, '\0'};
 	
-	exp.erase(exp.begin()+i-1);
-	exp.insert(exp.begin()+i-1, eresult);
-	exp.erase(exp.begin()+i);
+	erase(begin()+i-1);
+	insert(begin()+i-1, eresult);
+	erase(begin()+i);
 }
 
-void txc::vector::doubleArgOp(long i, double result) {
+void txc::vector::doubleArgOp(const long& i, const double& result) {
 	
 	txc::element eresult = {result, '\0'};
 	
-	exp.erase(exp.begin()+i-1);
-	exp.insert(exp.begin()+i-1, eresult);
-	exp.erase(exp.begin()+i);
-	exp.erase(exp.begin()+i);
+	erase(begin()+i-1);
+	insert(begin()+i-1, eresult);
+	erase(begin()+i);
+	erase(begin()+i);
 }
 
-void txc::vector::trig(long i, double result) {
+void txc::vector::trig(const long& i, const double& result) {
 	
 	txc::element eresult = {result, '\0'};
 	
-	exp.erase(exp.begin()+i);
-	exp.erase(exp.begin()+i);
-	exp.insert(exp.begin()+i, eresult);
+	erase(begin()+i);
+	erase(begin()+i);
+	insert(begin()+i, eresult);
 }
 
 void txc::vector::solveBrackets() {
 	
 	long i, j, k;
 	
-	for (i = exp.size()-1; i>=0; i--) {
-		if (exp[i].notval == '(') {
+	for (i = size()-1; i>=0; i--) {
+		if (at(i).notval == '(') {
 			j = i;
 			break;
 		}
 	}
 	for (k = 0; k < 11; k++) {
 		for (i = j; ; ) { // Breaks when it reaches a closing bracket
-			if (exp[i].notval == ORDEROFOPS[k]) {
+			if (at(i).notval == ORDEROFOPS[k]) {
 				switch (ORDEROFOPS[k]) {
 					case '+':
-						doubleArgOp(i, exp[i-1].val + exp[i+1].val);
+						doubleArgOp(i, at(i-1).val + at(i+1).val);
 						break;
 					case '-':
-						doubleArgOp(i, exp[i-1].val - exp[i+1].val);
+						doubleArgOp(i, at(i-1).val - at(i+1).val);
 						break;
 					case '*':
-						doubleArgOp(i, exp[i-1].val * exp[i+1].val);
+						doubleArgOp(i, at(i-1).val * at(i+1).val);
 						break;
 					case '/':
-						doubleArgOp(i, exp[i-1].val / exp[i+1].val);
+						doubleArgOp(i, at(i-1).val / at(i+1).val);
 						break;
 					case '^':
-						doubleArgOp(i, pow(exp[i-1].val, exp[i+1].val));
+						doubleArgOp(i, pow(at(i-1).val, at(i+1).val));
 						break;
 					case '%':
-						doubleArgOp(i, remainder(exp[i-1].val, exp[i+1].val));
+						doubleArgOp(i, remainder(at(i-1).val, at(i+1).val));
 						break;
 					case 'r':
-						doubleArgOp(i, pow(exp[i-1].val, 1 / exp[i+1].val));
+						doubleArgOp(i, pow(at(i-1).val, 1 / at(i+1).val));
 						break;
 					case '!':
-						singleArgOp(i, tgamma(exp[i-1].val + 1));
+						singleArgOp(i, tgamma(at(i-1).val + 1));
 						break;
 					case 's':
-						trig(i, sin(exp[i+1].val));
+						trig(i, sin(at(i+1).val));
 						break;
 					case 'c':
-						trig(i, cos(exp[i+1].val));
+						trig(i, cos(at(i+1).val));
 						break;
 					case 't':
-						trig(i, tan(exp[i+1].val));
+						trig(i, tan(at(i+1).val));
 						break;
 				}
 				i--;
-			} else if (exp[i].notval == ')') {
+			} else if (at(i).notval == ')') {
 				i = j;
 				break;
 			} else i++;
 		}
 	}
-	exp.erase(exp.begin()+i);
-	exp.erase(exp.begin()+i+1);
+	erase(begin()+i);
+	erase(begin()+i+1);
 }
 
 double txc::vector::solveExpression() {
 	for (long k = 0; k < 11; k++) {
-		for (long i = 0; i <= exp.size()-1; i++) {
-			if (exp[i].notval == ORDEROFOPS[k]) {
+		for (long i = 0; i <= size()-1; i++) {
+			if (at(i).notval == ORDEROFOPS[k]) {
 				switch (ORDEROFOPS[k]) {
 					case '+':
-						doubleArgOp(i, exp[i-1].val + exp[i+1].val);
+						doubleArgOp(i, at(i-1).val + at(i+1).val);
 						break;
 					case '-':
-						doubleArgOp(i, exp[i-1].val - exp[i+1].val);
+						doubleArgOp(i, at(i-1).val - at(i+1).val);
 						break;
 					case '*':
-						doubleArgOp(i, exp[i-1].val * exp[i+1].val);
+						doubleArgOp(i, at(i-1).val * at(i+1).val);
 						break;
 					case '/':
-						doubleArgOp(i, exp[i-1].val / exp[i+1].val);
+						doubleArgOp(i, at(i-1).val / at(i+1).val);
 						break;
 					case '^':
-						doubleArgOp(i, pow(exp[i-1].val, exp[i+1].val));
+						doubleArgOp(i, pow(at(i-1).val, at(i+1).val));
 						break;
 					case '%':
-						doubleArgOp(i, remainder(exp[i-1].val, exp[i+1].val));
+						doubleArgOp(i, remainder(at(i-1).val, at(i+1).val));
 						break;
 					case 'r':
-						doubleArgOp(i, pow(exp[i-1].val, 1 / exp[i+1].val));
+						doubleArgOp(i, pow(at(i-1).val, 1 / at(i+1).val));
 						break;
 					case '!':
-						singleArgOp(i, tgamma(exp[i-1].val + 1));
+						singleArgOp(i, tgamma(at(i-1).val + 1));
 						break;
 					case 's':
-						trig(i, sin(exp[i+1].val));
+						trig(i, sin(at(i+1).val));
 						break;
 					case 'c':
-						trig(i, cos(exp[i+1].val));
+						trig(i, cos(at(i+1).val));
 						break;
 					case 't':
-						trig(i, tan(exp[i+1].val));
+						trig(i, tan(at(i+1).val));
 						break;
 				}
 				i--;
 			}
 		}
 	}
-	return exp[0].val;
+	return at(0).val;
 }
 
 double txc::vector::solveAll() {
