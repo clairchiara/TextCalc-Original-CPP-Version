@@ -54,14 +54,14 @@ namespace txc {
 		static void loadbar(const long&, const long&);		// Generates the loading bar
 		expression() = delete;
 		expression(const char*) {};
-		void solve();										// Solves the expression
+		virtual void solve();								// Solves the expression
 	};
 	
 	class equation : public expression {
 		void replaceX(const double&);						// Replaces X with the value from input
 		void checkForm() const;								// Checks well-formedness conditions
 	public:
-		void solve(double, double, const long&);			// Solves equation with 2 starting values and n passages
+		void solve(double, double, const long&) override;	// Solves equation with 2 starting values and n passages
 	};
 }
 
