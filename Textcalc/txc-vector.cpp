@@ -9,28 +9,9 @@
 #include "definitions.h"
 #include "txc-vector.h"
 
-txc::element::element() {
-	val = NULL;
-	notval = '\0';
-}
+txc::element::element() : val(NULL), notval('\0') {}
 
 txc::element::element(const double& a, const char& b) : val(a), notval(b) {}
-
-double txc::element::getVal() const {
-	return val;
-}
-
-char txc::element::getNotVal() const {
-	return notval;
-}
-
-void txc::element::setVal(const double& number) {
-	val = number;
-}
-
-void txc::element::setNotVal(const char& oper) {
-	notval = oper;
-}
 
 txc::vector::vector() {}
 

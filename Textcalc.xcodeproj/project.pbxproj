@@ -29,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		761D077C191E1AC400CD4339 /* Copyright */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Copyright; sourceTree = "<group>"; };
+		761D8DBE1CE4DBD00022AB31 /* txc-expression_equation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "txc-expression_equation.h"; sourceTree = "<group>"; };
 		7631AF7E1916BC9200805948 /* Textcalc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Textcalc; sourceTree = BUILT_PRODUCTS_DIR; };
 		7631AF811916BC9200805948 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		7631AF831916BC9200805948 /* Textcalc.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Textcalc.1; sourceTree = "<group>"; };
@@ -77,6 +78,7 @@
 				7651A32619182D8C0035C273 /* txc-vector.h */,
 				7651A32219182D290035C273 /* functions.cpp */,
 				7631AF8A1916BCE100805948 /* txc-string.cpp */,
+				761D8DBE1CE4DBD00022AB31 /* txc-expression_equation.h */,
 				7651A32519182D8C0035C273 /* txc-vector.cpp */,
 				7631AF811916BC9200805948 /* main.cpp */,
 				7631AF831916BC9200805948 /* Textcalc.1 */,

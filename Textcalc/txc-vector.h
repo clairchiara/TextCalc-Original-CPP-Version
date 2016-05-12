@@ -16,13 +16,8 @@ namespace txc {
 	struct element {
 		double val;											// Contains numbers
 		char notval;										// Contains operators
-	public:
 		element();
 		element(const double&, const char&);
-		double getVal() const;
-		char getNotVal() const;
-		void setVal(const double&);
-		void setNotVal(const char&);
 	};
 	
 	class vector : public std::vector<txc::element> {
