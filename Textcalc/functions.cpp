@@ -9,7 +9,7 @@
 #include <iomanip>
 #include "functions.h"
 
-void txc::help(const char *argument) {
+void txc::help(const char* argument) {
 	std::cout << "Usage: " << argument << " [--help | -e | -q (-s # #) (-p #)]" << "\n\n"
 		<< "-e" << "\t\t" << "expression solving mode" << "\n"
 		<< "-q" << "\t\t" << "equation solving mode (default passages = 500,000" << "\n"
@@ -26,18 +26,18 @@ void txc::help(const char *argument) {
 		<< "s #" << "\t" << "sin" << "\n" << "c #" << "\t" << "cos" << "\n" << "t #" << "\t" << "tan" << "\n";
 }
 
-bool txc::samesign(const double& a, const double& b) {
+bool txc::samesign(const double a, const double b) {
 	return (a >= 0 && b >= 0)  || (a < 0 && b < 0);
 }
 
-double txc::random(const int& m) {
+double txc::random(const int m) {
 	
 	double a = rand() % 11;
 	
 	return (rand() % 2 == 0) ? a * ( 0.0012 * m * m) : -a * ( 0.0012 * m * m);
 }
 
-void txc::loadbar(const long& x, const long& n) {
+void txc::loadbar(const long x, const long n) {
 	if (x != n && x % (n / 100 + 1) != 0 && x != 1) return;
 	printf("\r");
 	fflush(stdout);

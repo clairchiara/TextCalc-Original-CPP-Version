@@ -11,7 +11,7 @@
 
 txc::element::element() : val(NULL), notval('\0') {}
 
-txc::element::element(const double& a, const char& b) : val(a), notval(b) {}
+txc::element::element(const double a, const char b) : val(a), notval(b) {}
 
 txc::vector::vector() {}
 
@@ -62,7 +62,7 @@ void txc::vector::negatives() {
 	}
 }
 
-void txc::vector::replaceX(const double& value) {
+void txc::vector::replaceX(const double value) {
 	
 	txc::element evalue = {value, '\0'};
 	
@@ -98,7 +98,7 @@ int txc::vector::countParentheses() const {
 	return parentheses;
 }
 
-void txc::vector::singleArgOp(const long& i, const double& result) {
+void txc::vector::singleArgOp(const long i, const double result) {
 	
 	txc::element eresult = {result, '\0'};
 	
@@ -107,7 +107,7 @@ void txc::vector::singleArgOp(const long& i, const double& result) {
 	erase(begin()+i);
 }
 
-void txc::vector::doubleArgOp(const long& i, const double& result) {
+void txc::vector::doubleArgOp(const long i, const double result) {
 	
 	txc::element eresult = {result, '\0'};
 	
@@ -117,7 +117,7 @@ void txc::vector::doubleArgOp(const long& i, const double& result) {
 	erase(begin()+i);
 }
 
-void txc::vector::trig(const long& i, const double& result) {
+void txc::vector::trig(const long i, const double result) {
 	
 	txc::element eresult = {result, '\0'};
 	

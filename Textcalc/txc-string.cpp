@@ -122,7 +122,7 @@ void txc::string::xCheckForm() const {
 	if (at(length()-1) != ')' && strchr(XCNUMBERS, at(length()-1)) == 0 && at(length()-1) != '!') malformed(length());
 }
 
-void txc::string::solveEquation(double one, double two, const long& passages) {
+void txc::string::solveEquation(double one, double two, const long passages) {
 	
 	txc::string equation;
 	txc::string exp;

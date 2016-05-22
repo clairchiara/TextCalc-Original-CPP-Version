@@ -24,7 +24,7 @@ namespace txc {
 		void checkSpaces() const;							// Checks that there are no spaces
 		void checkForm() const;								// Checks other well-formedness conditions
 		void xCheckForm() const;							// Checks well-formedness conditions
-		void solveEquation(double, double, const long&);	// Solves the equation with starting values and number of passages from the input
+		void solveEquation(double, double, const long);	// Solves the equation with starting values and number of passages from the input
 	};
 	
 }
